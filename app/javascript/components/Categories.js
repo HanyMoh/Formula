@@ -19,7 +19,7 @@ class Categories extends React.Component {
     return(
       <ul>
         {this.state.categories.map(category => (
-          <li key={category}>{category}</li>
+          <li key={category.id}>{category.name}</li>
         ))}
       </ul>
     )
