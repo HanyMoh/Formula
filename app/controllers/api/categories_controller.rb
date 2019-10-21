@@ -1,7 +1,7 @@
 module API
   class CategoriesController < ApplicationController
     def index
-      categories = Category.select(:name)
+      categories = Category.all
 
       render json: { categories: categories }
     end

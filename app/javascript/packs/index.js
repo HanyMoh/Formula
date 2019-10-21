@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from '../components/App'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.css';
+import 'font-awesome/css/font-awesome.css'
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
