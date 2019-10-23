@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   
   namespace :api, defaults: { format: 'json' } do
-    resources :categories, only: :index
-    resources :articles, only: :index
+    resources :categories
+    resources :articles
   end
 
   root to: "home#index"
