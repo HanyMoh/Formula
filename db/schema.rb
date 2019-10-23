@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_21_061838) do
+ActiveRecord::Schema.define(version: 2019_10_23_065303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "articles", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "title", limit: 60, null: false
+    t.text "content"
+    t.boolean "published", default: false
+    t.date "published_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category_id"], name: "index_articles_on_category_id"
+    t.index ["title"], name: "index_articles_on_title"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "name", limit: 25, null: false
@@ -22,4 +34,5 @@ ActiveRecord::Schema.define(version: 2019_10_21_061838) do
     t.index ["name"], name: "index_categories_on_name"
   end
 
+  add_foreign_key "articles", "categories"
 end
