@@ -1,7 +1,10 @@
 import axios from "axios";
 
+const csrfToken = document.querySelector('[name="csrf-token"]').content;
+
 axios.defaults.headers.common["Cache-Control"] = "no-store, no-cache";
 axios.defaults.headers.common["Content-Type"] = "application/x-www-form-urlencoded";
+axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
 axios.interceptors.response.use(null, error => {
   const expectedError =
