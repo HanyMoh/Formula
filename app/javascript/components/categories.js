@@ -59,7 +59,6 @@ class Categories extends React.Component {
 
     let filtered = allCategories.categories;
     
-    console.log("before", filtered)
     if (searchQuery){
       filtered = allCategories.filter(m =>
         m.name.toLowerCase().startsWith(searchQuery.toLowerCase())
@@ -69,7 +68,6 @@ class Categories extends React.Component {
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
     const categories = paginate(sorted, currentPage, pageSize);
-    console.log("length", sorted.length)
     return { totalCount: filtered.length, data: categories };
   };
 

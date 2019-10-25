@@ -1,9 +1,7 @@
 module API
-  class ArticleController < ApplicationController
+  class ArticlesController < ApplicationController
     def index
-      articles = Article.includes(:category).order(created_at: :desc)
-
-      render json: { articles: articles }
+      @articles = Article.includes(:category).order(created_at: :desc)
     end
   
     def create
@@ -25,8 +23,8 @@ module API
     end
   
     def show
-      if article
-        render json: article
+      if @article
+        render json: @article
       else
         render json: article.errors
       end

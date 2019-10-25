@@ -5,7 +5,7 @@ const NavBar = ({ user }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="/">
-        myThoughts
+        Formula
       </Link>
       <button
         className="navbar-toggler"
@@ -23,8 +23,8 @@ const NavBar = ({ user }) => {
           <NavLink className="nav-item nav-link" to="/categories">
             Categories
           </NavLink>
-          <NavLink className="nav-item nav-link" to="/posts">
-            Posts
+          <NavLink className="nav-item nav-link" to="/articles">
+            Articles
           </NavLink>
           <NavLink className="nav-item nav-link" to="/comments">
             Comments
