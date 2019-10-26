@@ -1,7 +1,7 @@
 module API
   class ArticlesController < ApplicationController
     def index
-      @articles = Article.includes(:category).order(created_at: :desc)
+      @articles = Article.includes(:category).order(published_date: :desc)
     end
   
     def create

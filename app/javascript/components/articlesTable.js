@@ -26,6 +26,11 @@ class ArticlesTable extends Component {
     )
   }
 
+  constructor() {
+    super();
+    this.columns.push(this.deleteColumn);
+  }
+
   render() {
     const { articles, onSort, sortColumn } = this.props;
 

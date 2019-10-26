@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ArticlesTable from "./articlesTable";
+import ListGroup from "./common/listGroup";
 import Pagination from "./common/pagination";
 import { getArticles, deleteArticle } from "../services/articleService";
 import { getCategories } from "../services/categoryService";
@@ -16,12 +17,15 @@ class Articles extends React.Component {
     pageSize: 4,
     searchQuery: "",
     selectedCategory: null,
-    sortColumn: { path: "title", order: "asc" }
+    sortColumn: { path: "published_date", order: "desc" }
   };
 
   async componentDidMount() {
+    const { data } = await getCategories();
+    const categories = [{ id: "", name: "All Categories" }, ...data.categories];
+
     const { data: articles } = await getArticles();
-    this.setState({ articles });
+    this.setState({ articles, categories });
   }
 
   handleDelete = async article => {
@@ -33,7 +37,6 @@ class Articles extends React.Component {
       await deleteArticle(article.id);
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
-        console.log("x");
         alert("This article has already been deleted.");
       }
 
@@ -43,6 +46,10 @@ class Articles extends React.Component {
 
   handlePageChange = page => {
     this.setState({ currentPage: page });
+  };
+
+  handleCategorySelect = category => {
+    this.setState({ selectedCategory: category, searchQuery: "", currentPage: 1 });
   };
 
   handleSearch = query => {
@@ -58,16 +65,20 @@ class Articles extends React.Component {
       pageSize,
       currentPage,
       sortColumn,
+      selectedCategory,
       searchQuery,
       articles: allArticles
     } = this.state;
 
     let filtered = allArticles.articles;
-    if (searchQuery)
-      filtered = allArticles.filter(m =>
+    if (searchQuery){
+      filtered = allArticles.articles.filter(m =>
         m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
-    
+    } else if (selectedCategory && selectedCategory.id){
+      filtered = allArticles.articles.filter(m => m.category.id === selectedCategory.id); 
+    }
+
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
     const articles = paginate(sorted, currentPage, pageSize);
@@ -86,7 +97,11 @@ class Articles extends React.Component {
     return (
       <div className="row">
         <div className="col-3">
-          
+          <ListGroup
+              items={this.state.categories}
+              selectedItem={this.state.selectedCategory}
+              onItemSelect={this.handleCategorySelect}
+          />
         </div>
         <div className="col">
           <Link
@@ -101,7 +116,7 @@ class Articles extends React.Component {
           <ArticlesTable
             articles={articles}
             sortColumn={sortColumn}
-            onLike={this.handleLike}
+            // onLike={this.handleLike}
             onDelete={this.handleDelete}
             onSort={this.handleSort}
           />

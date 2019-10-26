@@ -29,8 +29,8 @@ class Categories extends React.Component {
     try {
       await deleteCategory(category.id);
     } catch (ex) {
-      if (ex.response && ex.response.status === 404) console.log("x");
-      alert("This category has already been deleted.");
+      if (ex.response && ex.response.status === 404) 
+        alert("This category has already been deleted.");
 
       this.setState({ categories: originalCategories });
     }

@@ -1,9 +1,7 @@
 module API
   class CategoriesController < ApplicationController
     def index
-      categories = Category.all
-
-      render json: { categories: categories }
+      @categories = Category.order(name: :asc)
     end
 
     def create
