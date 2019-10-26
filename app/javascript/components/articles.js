@@ -60,6 +60,14 @@ class Articles extends React.Component {
     this.setState({ sortColumn });
   };
 
+  handlePublished = article => {
+    const articles = [...this.state.articles.articles];
+    const index = articles.indexOf(article);
+    articles[index] = { ...articles[index] };
+    articles[index].published = !articles[index].published;
+    this.setState({articles});
+  };
+
   getPagedData = () => {
     const {
       pageSize,
@@ -116,7 +124,7 @@ class Articles extends React.Component {
           <ArticlesTable
             articles={articles}
             sortColumn={sortColumn}
-            // onLike={this.handleLike}
+            onPublished={this.handlePublished}
             onDelete={this.handleDelete}
             onSort={this.handleSort}
           />

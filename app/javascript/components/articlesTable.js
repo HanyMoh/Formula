@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Table from "./common/table";
+import Published from "./common/published";
 
 class ArticlesTable extends Component {
   columns = [
+    {
+      key: "published",
+      content: article => (
+        <Published published={article.published} onClick={() => this.props.onPublished(article)} />
+      )
+    },
     { path: "published_date", label: "Date" },
     { path: "category.name", label: "Category" },
     {
