@@ -1,5 +1,7 @@
 module API
   class ArticlesController < ApplicationController
+    before_action :set_article, only: [:show, :update, :destroy]
+
     def index
       @articles = Article.includes(:category).order(published_date: :desc)
     end
@@ -7,32 +9,30 @@ module API
     def create
       @article = Article.create!(article_params)
       if @article
-        render json: @article
+        render @article
       else
-        render json: @article.errors
+        render @article.errors
       end
     end
     
     def update
-      if article
-        article.update(article_params)
-        render json: article
+      if @article
+        @article = @article.update(article_params)
       else
-        render json: article.errors
+        @article.errors
       end
     end
   
     def show
       if @article
-        render json: @article
+        render @article
       else
-        render json: article.errors
+        @article.errors
       end
     end
   
     def destroy
-      article&.destroy
-      render json: { message: 'Article deleted!' }
+      @article&.destroy
     end
   
     private
@@ -41,7 +41,7 @@ module API
       params.permit(:category_id, :title, :content, :published, :published_date, :image)
     end
   
-    def article
+    def set_article
       @article ||= Article.find(params[:id])
     end
   end
