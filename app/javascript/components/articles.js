@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
 import ArticlesTable from "./articlesTable";
 import ListGroup from "./common/listGroup";
 import Pagination from "./common/pagination";
@@ -35,11 +36,12 @@ class Articles extends Component {
 
     try {
       await deleteArticle(article.id);
+      toast.success("This article has already been deleted.");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) 
-        console.log("x");
+        console.log(ex);
+        toast.error("This article not deleted.");
         
-      alert("This article has already been deleted.");
       this.setState({ articles: originalArticles });
     }
   };
