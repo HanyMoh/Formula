@@ -8,7 +8,10 @@ class ArticlesTable extends Component {
     {
       key: "published",
       content: article => (
-        <Published published={article.published} onClick={() => this.props.onPublished(article)} />
+        <Published 
+          published={article.published} 
+          onClick={() => this.props.onPublished(article)} 
+        />
       )
     },
     { path: "published_date", label: "Date" },

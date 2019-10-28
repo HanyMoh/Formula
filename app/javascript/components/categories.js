@@ -23,7 +23,7 @@ class Categories extends React.Component {
 
   handleDelete = async category => {
     const originalCategories = this.state.categories;
-    const categories = originalCategories.categories.filter(m => m.id !== category.id);
+    const categories = originalCategories.filter(m => m.id !== category.id);
     this.setState({ categories });
 
     try {
@@ -57,7 +57,7 @@ class Categories extends React.Component {
       categories: allCategories
     } = this.state;
 
-    let filtered = allCategories.categories;
+    let filtered = allCategories;
     
     if (searchQuery){
       filtered = allCategories.filter(m =>

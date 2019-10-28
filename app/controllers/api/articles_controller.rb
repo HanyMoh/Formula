@@ -5,11 +5,11 @@ module API
     end
   
     def create
-      article = Article.create!(article_params)
-      if article
-        render json: article
+      @article = Article.create!(article_params)
+      if @article
+        render json: @article
       else
-        render json: article.errors
+        render json: @article.errors
       end
     end
     

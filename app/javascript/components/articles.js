@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import ArticlesTable from "./articlesTable";
 import ListGroup from "./common/listGroup";
@@ -9,7 +9,7 @@ import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import SearchBox from "./searchBox";
 
-class Articles extends React.Component {
+class Articles extends Component {
   state = {
     articles: [],
     categories: [],
@@ -22,7 +22,7 @@ class Articles extends React.Component {
 
   async componentDidMount() {
     const { data } = await getCategories();
-    const categories = [{ id: "", name: "All Categories" }, ...data.categories];
+    const categories = [{ id: "", name: "All Categories" }, ...data];
 
     const { data: articles } = await getArticles();
     this.setState({ articles, categories });
@@ -30,18 +30,26 @@ class Articles extends React.Component {
 
   handleDelete = async article => {
     const originalArticles = this.state.articles;
-    const articles = originalArticles.articles.filter(m => m.id !== article.id);
+    const articles = originalArticles.filter(m => m.id !== article.id);
     this.setState({ articles });
 
     try {
       await deleteArticle(article.id);
     } catch (ex) {
-      if (ex.response && ex.response.status === 404) {
-        alert("This article has already been deleted.");
-      }
-
+      if (ex.response && ex.response.status === 404) 
+        console.log("x");
+        
+      alert("This article has already been deleted.");
       this.setState({ articles: originalArticles });
     }
+  };
+
+  handlePublished = article => {
+    const articles = [...this.state.articles];
+    const index = articles.indexOf(article);
+    articles[index] = { ...articles[index] };
+    articles[index].published = !articles[index].published;
+    this.setState({ articles });
   };
 
   handlePageChange = page => {
@@ -60,14 +68,6 @@ class Articles extends React.Component {
     this.setState({ sortColumn });
   };
 
-  handlePublished = article => {
-    const articles = [...this.state.articles.articles];
-    const index = articles.indexOf(article);
-    articles[index] = { ...articles[index] };
-    articles[index].published = !articles[index].published;
-    this.setState({articles});
-  };
-
   getPagedData = () => {
     const {
       pageSize,
@@ -78,14 +78,13 @@ class Articles extends React.Component {
       articles: allArticles
     } = this.state;
 
-    let filtered = allArticles.articles;
-    if (searchQuery){
-      filtered = allArticles.articles.filter(m =>
+    let filtered = allArticles;
+    if (searchQuery)
+      filtered = allArticles.filter(m =>
         m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
-    } else if (selectedCategory && selectedCategory.id){
-      filtered = allArticles.articles.filter(m => m.category.id === selectedCategory.id); 
-    }
+    else if (selectedCategory && selectedCategory.id)
+      filtered = allArticles.filter(m => m.category.id === selectedCategory.id);
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
@@ -97,7 +96,7 @@ class Articles extends React.Component {
   render() {
     const { length: count } = this.state.articles;
     const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
-
+    
     if (count === 0) return <p>There are no articles in the database.</p>;
 
     const { totalCount, data: articles } = this.getPagedData();
@@ -106,9 +105,9 @@ class Articles extends React.Component {
       <div className="row">
         <div className="col-3">
           <ListGroup
-              items={this.state.categories}
-              selectedItem={this.state.selectedCategory}
-              onItemSelect={this.handleCategorySelect}
+            items={this.state.categories}
+            selectedItem={this.state.selectedCategory}
+            onItemSelect={this.handleCategorySelect}
           />
         </div>
         <div className="col">
